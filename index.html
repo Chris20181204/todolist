@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>備忘錄</title>
+  <!-- <link rel="stylesheet" href="css/all.css"> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+  <style>
+    body{
+      font-family: 'Noto Sans TC', sans-serif;
+      background: rgb(156, 236, 230);
+    }
+    .wrap{
+      /* border:1px solid #333; */
+      box-shadow: 0px 15px 15px #333;
+      text-align: center;
+      background: rgb(243, 213, 157);
+      width: 400px;
+      margin: 0 auto;
+      margin-top: 100px;
+      height: 600px;
+    }
+    .title{
+      padding-top: 20px;
+    }
+    .text{
+      width: 200px;
+      padding: 10px 20px;
+      background: rgba(0, 0, 0, 0.623);
+      border:none;
+      outline:none;
+      color:#fff;
+      border-radius: 5px;
+    }
+    .send{
+      background: rgb(28, 99, 192);
+      padding:8px 15px; 
+      border-radius: 5px;
+      font-weight: 900; 
+      cursor: pointer;
+      color:#fff;
+      border:none;
+      outline:none;
+    }
+    .list {
+      list-style:none;
+      text-align: left;
+      font-size: 20px;
+    }
+    .list li a{
+      text-decoration: none;
+      color:#888;
+    }
+  </style>
+</head>
+<body>
+   <div class="wrap clearfix">
+     <div class="title">
+      <h2>LIST TO DO</h2>
+     </div>
+     <div class="content">
+        <div class="addList">
+          <input type="text" class="text"  placeholder="寫入代辦項目" required >
+          <input type="button" class="send" value="加入">
+        </div>
+        <ul class="list"></ul>
+        
+     </div>
+  </div>
+
+<script>
+  var list = document.querySelector(".list");
+  var sendData = document.querySelector('.send');
+  var data =JSON.parse(localStorage.getItem('.listData')) || [];
+
+  sendData.addEventListener('click',addData);
+  list.addEventListener('click',toggleDone);
+  updateList(data);
+
+  function addData(e){
+    e.preventDefault();
+    var nametext = document.querySelector('.text').value;
+    var todo={
+      content :nametext
+    };
+    data.push(todo);
+    updateList(data);
+    localStorage.setItem('listData',JSON.stringify(data));
+  }
+
+  function updateList(items){
+    str = '';
+    var len = items.length;
+    for (var i=0; i<len; i++){
+      str+='<li><span>'+items[i].content+'</span><a href="#" data-index='+i+'> 刪除</a></li>'
+    }
+    list.innerHTML=str;
+  }
+
+  function toggleDone(e){
+    e.preventDefault();
+    if(e.target.tagName !=='A'){return};
+    var index = e.target.dataset.index;
+    data.splice(index,1);
+    localStorage.setItem('listData',JSON.stringify(data));
+    updateList(data);
+  }
+
+</script>
+</body>
+</html>
